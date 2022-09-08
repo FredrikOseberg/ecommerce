@@ -1,16 +1,15 @@
-import { Router } from 'express';
 import { Request, Response } from 'express';
 import { IServices } from '../interfaces/architecture';
 import { ProductService } from '../services/product-service';
+import { BaseController } from './base-controller';
 
-export class ProductController {
-  public router: Router;
-
+export class ProductController extends BaseController {
   private productService: ProductService;
 
   constructor({ productService }: Pick<IServices, 'productService'>) {
-    this.router = Router();
+    super();
     this.productService = productService;
+
     this.router.get('/', this.getProducts);
     this.router.get('/:productId', this.getProduct);
     this.router.post('/', this.createProduct);
