@@ -14,4 +14,4 @@ You can find snapshots of the different chapters as branches in this repository.
 
 2. Run the server
 
-`npm run start`
+`npm run start:nodemon`
