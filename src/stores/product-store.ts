@@ -38,6 +38,8 @@ export class ProductStore {
 
   create = (product: IProduct) => {
     products.push(product);
+
+    return product;
   };
 
   update = (updatedProduct: IProduct) => {

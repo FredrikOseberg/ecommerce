@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { IServices } from '../interfaces/architecture';
+import { IProduct } from '../interfaces/product';
 import { ProductService } from '../services/product-service';
 import { BaseController } from './base-controller';
 
@@ -10,15 +11,32 @@ export class ProductController extends BaseController {
     super();
     this.productService = productService;
 
-    this.router.get('/', this.getProducts);
-    this.router.get('/:productId', this.getProduct);
-    this.router.post('/', this.createProduct);
-    this.router.put('/:productId', this.updateProduct);
-    this.router.delete('/:productId', this.deleteProduct);
+    this.route({ path: '/', method: 'get', handler: this.getProducts });
+    this.route({
+      path: '/:productId',
+      method: 'get',
+      handler: this.getProduct,
+    });
+    this.route({
+      path: '/',
+      method: 'post',
+      handler: this.createProduct,
+    });
+    this.route({
+      path: '/:productId',
+      method: 'put',
+      handler: this.updateProduct,
+    });
+    this.route({
+      path: '/:productId',
+      method: 'delete',
+      handler: this.deleteProduct,
+    });
   }
 
-  getProducts = (req: Request, res: Response) => {
+  getProducts = async (req: Request, res: Response) => {
     const products = this.productService.getProducts();
+
     return res.json(products);
   };
 
@@ -42,6 +60,6 @@ export class ProductController extends BaseController {
       req.params.productId
     );
 
-    res.json(deleted);
+    return res.json(deleted);
   };
 }

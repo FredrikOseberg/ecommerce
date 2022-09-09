@@ -5,6 +5,7 @@ import {
   Response,
   RequestHandler,
 } from 'express';
+import { formatError, handleErrors } from '../util';
 
 interface IRouteOptions extends IRouteOptionsBase {
   method: 'post' | 'put' | 'patch' | 'delete' | 'get';
@@ -13,7 +14,6 @@ interface IRouteOptions extends IRouteOptionsBase {
 
 interface IRouteOptionsBase {
   path: string;
-  permission: string;
   middleware?: RequestHandler[];
   handler: IRequestHandler;
   acceptedContentTypes?: string[];
@@ -25,10 +25,10 @@ interface IRequestHandler<
   ReqBody = any,
   ReqQuery = any
 > {
-  (
-    req: Request<P, ResBody, ReqBody, ReqQuery>,
-    res: Response<ResBody>
-  ): Promise<void> | void;
+  (req: Request<P, ResBody, ReqBody, ReqQuery>, res: Response<ResBody>):
+    | Promise<void>
+    | void
+    | unknown;
 }
 
 export class BaseController {
@@ -49,8 +49,10 @@ export class BaseController {
     return async (req: Request, res: Response) => {
       try {
         await handler(req, res);
-      } catch (error) {
-        console.log(error);
+      } catch (error: unknown) {
+        const formattedError = formatError(error);
+
+        handleErrors(res, formattedError);
       }
     };
   };
