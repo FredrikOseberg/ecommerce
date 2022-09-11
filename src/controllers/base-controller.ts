@@ -41,6 +41,7 @@ export class BaseController {
   route = (options: IRouteOptions) => {
     this.router[options.method](
       options.path,
+      options.middleware ? options.middleware : [],
       this.wrapWithErrorHandling(options.handler)
     );
   };
