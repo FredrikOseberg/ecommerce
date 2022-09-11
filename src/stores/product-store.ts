@@ -1,6 +1,6 @@
 import { IProduct } from '../interfaces/product';
 
-const products: IProduct[] = [
+export const products: IProduct[] = [
   {
     title: 'Product 1',
     description: 'Product 1 description',
@@ -33,7 +33,7 @@ export class ProductStore {
       return product;
     }
 
-    return {};
+    return {} as { [key: string]: any };
   };
 
   create = (product: IProduct) => {
